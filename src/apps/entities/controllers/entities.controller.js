@@ -85,11 +85,11 @@ class EntitiesController {
             }
 
             const currentEntityPermissions = entity.permissions
-            
-            const filteredsPermissions = currentEntityPermissions.filter(currentPermission =>{
-                for(const permission of permissions){
-                    return currentPermission !== permission
-                }
+
+            const toEliminateValues = new Set(permissions)
+
+            let filteredsPermissions = currentEntityPermissions.filter(currentPermission => {
+                return !toEliminateValues.has(currentPermission)
             })
 
             if(filteredsPermissions.length === currentEntityPermissions.length) return res.status(400).json(Errors.badInfo)
@@ -113,21 +113,24 @@ class EntitiesController {
         try{
             const entity = await EntityModel.findById(id)
 
-            const filteredsPermissions = entity.permissions.filter(currentPermission =>{
-                for(const permission of permissions){
-                    return currentPermission === permission
-                }
+            // const filteredsPermissions = entity.permissions.filter(currentPermission =>{
+            //     for(const permission of permissions){
+            //         return currentPermission === permission
+            //     }
+            // })
+            let toAddPermissions = new Set(permissions)
+            let filteredsPermissions = entity.permissions.filter(currentPermission => {
+                return toAddPermissions.has(currentPermission)
             })
 
             if(filteredsPermissions.length !== 0) return res.status(400).json(Errors.badInfo)
-            
+
             entity.permissions = [...entity.permissions, ...permissions]
             entity.save()
             return res.status(200).json({entity})
         }catch{
             return res.status(500).json(Errors.genericServerError)
         }
-        return res.status(200).json({id})
     }
 }
 

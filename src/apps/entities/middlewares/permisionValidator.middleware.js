@@ -5,6 +5,7 @@ const permissionValidator = (req, res, next) => {
     const {permissions} = req.body
 
     if(!permissions) return res.status(400).json(Errors.badInfo)
+    if(new Set(permissions).size < permissions.length) return res.status(400).json(Errors.badInfo)
 
     const upperCasePermissions = permissions.map(permission => permission.toUpperCase())
        
