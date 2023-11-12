@@ -6,17 +6,18 @@ const cors = require('cors')
 const corsOptions = require('../config/corsConfig')
 const loguer = require('morgan')
 const path = require('path')
+const entitiesRouter = require('../apps/entities/routes/router')
 
 dotenv.config()
 
 
 class Server{
 
-    app;
-    port;
+    static app;
+    static port;
 
     apiPaths = {
-        // permisionsPaths        : '/api/v1/roles',
+        entitiesPaths : '/api/v1/entities',
     };
 
     constructor(){
@@ -42,7 +43,7 @@ class Server{
         this.app.use(loguer('dev'))
     }
     router(){
-        // this.app.use(this.apiPaths.permisionsPaths, permisionsRouter)
+        this.app.use(this.apiPaths.entitiesPaths, entitiesRouter)
     }
 
     listen(){
