@@ -14,7 +14,7 @@ class EntityUseCases{
                 return Messages.errorMessage(400,Errors.infoDontExistInDb)
             }   
 
-            return Messages.sucessfullMesage(200,entity)
+            return Messages.sucessfullMesage(200,{entity:entity})
 
         }catch{
             return Messages.errorMessage(500,Errors.genericServerError) 
@@ -23,7 +23,7 @@ class EntityUseCases{
     static async getAllEntities(){
         try{
             const entities = await EntitiesModel.find()
-            if(!!entities) return Messages.sucessfullMesage(200, entities)
+            if(!!entities) return Messages.sucessfullMesage(200, {entities:entities})
             return Messages.sucessfullMesage(200, {entities:[]})
         }catch{
             return Messages.errorMessage(500, Errors.genericServerError)
@@ -123,6 +123,18 @@ class EntityUseCases{
 
         }
 
+    }
+    static async getAllTheEntitiesWithReadPermission(){
+        try{    
+            const entities = await EntitiesModel.find()
+            if(!entities) return Messages.sucessfullMesage(200,{entities:[]})
+            
+            const filteredsEntities = entities.filter(entity => entity.permissions.includes('READ'))
+            if(entities.length === 0) return Messages.sucessfullMesage(200,{entities:[]})
+            return Messages.sucessfullMesage(200,{entities:filteredsEntities})
+        }catch{
+            return Messages.errorMessage(500, Errors.genericServerError)
+        }
     }
 }
 
