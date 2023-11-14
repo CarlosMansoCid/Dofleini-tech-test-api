@@ -7,6 +7,7 @@ const corsOptions = require('../config/corsConfig')
 const loguer = require('morgan')
 const path = require('path')
 const entitiesRouter = require('../apps/entities/routes/router')
+const rolesRouter = require('../apps/roles/routes/router')
 
 dotenv.config()
 
@@ -18,6 +19,7 @@ class Server{
 
     apiPaths = {
         entitiesPaths : '/api/v1/entities',
+        rolesPaths: '/api/v1/roles'
     };
 
     constructor(){
@@ -44,6 +46,7 @@ class Server{
     }
     router(){
         this.app.use(this.apiPaths.entitiesPaths, entitiesRouter)
+        this.app.use(this.apiPaths.rolesPaths, rolesRouter)
     }
 
     listen(){

@@ -5,8 +5,6 @@ const validateAndAdapteInputData = require('../middlewares/validateAndAdapteInpu
 const validatePermissions = require('../middlewares/permisionValidator.middleware')
 
 
-
-console.log(Controller.getOne)
 router.get('/', Controller.getAll)
 router.get('/:id', Controller.getOne)
 router.delete('/:id', Controller.deleteEntity)
