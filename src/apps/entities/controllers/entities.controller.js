@@ -1,12 +1,9 @@
-const EntityModel = require('../models/entity.model')
 const Errors = require('../../../errors/errors')
 const PermissionValidator = require('../middlewares/permisionValidator.middleware')
 const UseCases = require('../../../useCases/entityUseCases')
 
 class EntitiesController extends UseCases{
 
-    
-    
     static async getOne (req, res){
         
         const {id} = req.params

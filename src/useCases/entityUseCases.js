@@ -8,13 +8,18 @@ class EntityUseCases{
     static async getOneEntity(id){
         try{
             const entity = await EntitiesModel.findById(id)
-            
-            
-            if(!entity){
-                return Messages.errorMessage(400,Errors.infoDontExistInDb)
-            }   
-
+            if(!entity) return Messages.errorMessage(400,Errors.infoDontExistInDb)
             return Messages.sucessfullMesage(200,{entity:entity})
+        }catch{
+            return Messages.errorMessage(500,Errors.genericServerError) 
+        }
+    }
+    static async getOneEntityByName(name){
+        try{
+            const entity = await EntitiesModel.findOne({name:name})
+            if(!entity) return Messages.errorMessage(400,Errors.infoDontExistInDb)
+            return Messages.sucessfullMesage(200,{entity:entity})
+
 
         }catch{
             return Messages.errorMessage(500,Errors.genericServerError) 
