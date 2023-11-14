@@ -35,7 +35,6 @@ class EntityUseCases{
             const entityAllreadyExist = await EntitiesModel.findOne({name:name})
 
             if(!!entityAllreadyExist) return Messages.errorMessage(400,Errors.infoAllreadyExistInDb)
-
             const newEntity = new EntitiesModel({
                 name: name,
                 permissions: permissions
@@ -126,12 +125,21 @@ class EntityUseCases{
     }
     static async getAllTheEntitiesWithReadPermission(){
         try{    
-            const entities = await EntitiesModel.find()
+            let entities = await EntitiesModel.find()
             if(!entities) return Messages.sucessfullMesage(200,{entities:[]})
             
-            const filteredsEntities = entities.filter(entity => entity.permissions.includes('READ'))
+
             if(entities.length === 0) return Messages.sucessfullMesage(200,{entities:[]})
-            return Messages.sucessfullMesage(200,{entities:filteredsEntities})
+
+            let filteredsEntities = []
+            entities.forEach(entity =>{ 
+                entity.permissions?.forEach(permission =>{
+                    if(permission?.includes('READ')){
+                        filteredsEntities.push(`${entity.name}:${permission}`)
+                    }
+                })
+            })
+            return Messages.sucessfullMesage(200,filteredsEntities)
         }catch{
             return Messages.errorMessage(500, Errors.genericServerError)
         }
