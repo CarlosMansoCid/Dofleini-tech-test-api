@@ -1,6 +1,7 @@
 const {Router} = require('express')
 const router = Router()
+const RolesController = require('../controllers/roles.controller')
 
-router.get('/', async (req, res) => res.status(200).json({message:'im alive'}).end())
+router.get('/', RolesController.getAll)
 
 module.exports = router
