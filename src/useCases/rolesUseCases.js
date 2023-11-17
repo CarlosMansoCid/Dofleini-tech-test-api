@@ -72,9 +72,8 @@ class RolesUseCases {
             }
 
             const uniquePermissions = getUniqueElementsInTwoArrays(permissions, roleInDb.permissions)
-            console.log(uniquePermissions)
             if(uniquePermissions.length > 0){
-                const newPermissions = [...uniquePermissions,...permissions]
+                const newPermissions = [...uniquePermissions,...roleInDb.permissions]
                 roleInDb.permissions = newPermissions
                 await roleInDb.save()
                 return Messages.sucessfullMesage(200, {role:roleInDb})
