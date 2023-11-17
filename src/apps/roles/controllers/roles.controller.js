@@ -36,15 +36,23 @@ class RolesController extends RolesUseCases{
 
     }
     static async addPermissions(req, res){
-        const {permissions, id} = req.body
-
+        const {permissions} = req.body
+        const {id} = req.params
         if(!permissions || !id) return res.status(400).json(Errors.badInfo)
 
         const response = await super.addPermissions(permissions, id)
         if(!response.ok) return res.status(response.code).json(response.error)
 
         return res.status(response.code).json(response.payload)
+    }
+    static async deletePermissions(req, res){
+        const {id, permissions} = req.body
+        if(!permissions || !id) return res.status(400).json(Errors.badInfo)
 
+        const response = await super.deletePermissions(permissions, id)
+        if(!response.ok) return res.status(response.code).json(response.error)
+
+        return res.status(response.code).json(response.payload)
     }
     static async clearAllPermissions(req, res){
         const {id} = req.params

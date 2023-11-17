@@ -109,7 +109,6 @@ class RolesUseCases {
             if(!roles || roles.lenth === 0) return Messages.errorMessage(400, Errors.badInfo)
 
             roles.forEach(async role =>{
-                console.log(role.permissions.indexOf(permission)===-1)
                 if(role.permissions.indexOf(permission) === -1){
                     role.permissions.push(permission)
                     await role.save()
@@ -121,6 +120,19 @@ class RolesUseCases {
             return Messages.errorMessage(500, Errors.genericServerError)
         }
 
+    }
+    static async deletePermissions(permissions, id){
+        try{
+            const role = await RolesModel.findById(id)
+            if(!role) return Messages.errorMessage(400,Errors.infoDontExistInDb)
+            const filteredsPermissions = getUniqueElementsInTwoArrays(role.permissions, permissions)
+            role.permissions = filteredsPermissions
+            console.log(filteredsPermissions)
+            await role.save()
+            return Messages.sucessfullMesage(200,{role:role})
+        }catch{
+            return Messages.errorMessage(500, Errors.genericServerError)
+        }
     }
 
 }

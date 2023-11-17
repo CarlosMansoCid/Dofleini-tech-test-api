@@ -13,7 +13,8 @@
     "helmet": "^7.0.0",
     "hpp": "^0.2.3",
     "mongoose": "^7.5.0",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "react-hook-form": "^7.48.2"
   },
   "devDependencies": {
     "nodemon": "^3.0.1"
