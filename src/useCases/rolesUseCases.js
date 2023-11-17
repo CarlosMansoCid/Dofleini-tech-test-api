@@ -62,7 +62,6 @@ class RolesUseCases {
 
     }
     static async addPermissions(permissions, id){
-        console.log(permissions, id)
         try{
             const roleInDb = await RolesModel.findById(id)
             if(!roleInDb) return Messages.errorMessage(400, Errors.infoDontExistInDb)
@@ -148,9 +147,10 @@ class RolesUseCases {
             const rolesId = allRoles.map(role => {return role.id})
             if(!rolesId) return  Messages.errorMessage(500, Errors.genericServerError)
 
+            const permissionsWithEntityName = entityPermissions.map(permission => `${entity.payload.entity.name}:${permission}`)
+            
             for(let roleId of rolesId){
-                const resp = await RolesUseCases.addPermissions(entityPermissions, roleId)
-                console.log(resp)
+                const resp = await RolesUseCases.addPermissions(permissionsWithEntityName, roleId)
                 if(!resp.ok) return Messages.errorMessage(500, Errors.genericServerError)
             }
             return Messages.sucessfullMesage(204, {})
