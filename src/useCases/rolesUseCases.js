@@ -3,6 +3,7 @@ const Messages = require('../messages/messages')
 const RolesModel = require('../apps/roles/models/roles.model')
 const { getAllTheEntitiesWithReadPermission, getOneEntityByName } = require('./entityUseCases')
 const getUniqueElementsInTwoArrays = require('../utils/functions/getUniqueElementsInTwoArrays')
+const EntityUseCases = require('./entityUseCases')
 
 class RolesUseCases {
     constructor(){}
@@ -61,6 +62,7 @@ class RolesUseCases {
 
     }
     static async addPermissions(permissions, id){
+        console.log(permissions, id)
         try{
             const roleInDb = await RolesModel.findById(id)
             if(!roleInDb) return Messages.errorMessage(400, Errors.infoDontExistInDb)
@@ -129,6 +131,29 @@ class RolesUseCases {
             role.permissions = filteredsPermissions
             await role.save()
             return Messages.sucessfullMesage(200,{role:role})
+        }catch{
+            return Messages.errorMessage(500, Errors.genericServerError)
+        }
+    }
+    static async addAllPermissionsFromAEntityToAllRoles(entityId){
+        try{
+            const entity = await EntityUseCases.getOneEntity(entityId)
+            if(!entity) return Messages.errorMessage(400, Errors.badInfo)
+
+            const allRoles = await RolesModel.find()
+            if(!allRoles) return Messages.errorMessage(400, Errors.infoDontExistInDb)
+
+            const entityPermissions = entity.payload.entity.permissions
+
+            const rolesId = allRoles.map(role => {return role.id})
+            if(!rolesId) return  Messages.errorMessage(500, Errors.genericServerError)
+
+            for(let roleId of rolesId){
+                const resp = await RolesUseCases.addPermissions(entityPermissions, roleId)
+                console.log(resp)
+                if(!resp.ok) return Messages.errorMessage(500, Errors.genericServerError)
+            }
+            return Messages.sucessfullMesage(204, {})
         }catch{
             return Messages.errorMessage(500, Errors.genericServerError)
         }

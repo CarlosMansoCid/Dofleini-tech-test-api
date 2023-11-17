@@ -8,6 +8,7 @@ router.get('/:id', RolesController.getById)
 
 router.post('/', validateAndAdapteInputData, RolesController.createRole)
 router.post('/:id', RolesController.addPermissions)
+router.post('/entity/:entity_id', RolesController.addAllPermissionsFromAEntityAtAllRoles)
 
 router.delete('/:id', RolesController.deleteRole)
 

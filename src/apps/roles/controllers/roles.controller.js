@@ -70,6 +70,15 @@ class RolesController extends RolesUseCases{
         if(!response.ok) return res.status(response.code).json(response.error)
         return res.status(response.code).json(response.payload)
     }
+    static async addAllPermissionsFromAEntityAtAllRoles(req, res){
+        const {entity_id} = req.params
+        if(!entity_id) return res.status(400).json(Errors.badInfo)
+
+        const response = await super.addAllPermissionsFromAEntityToAllRoles(entity_id)
+
+        if(!response.ok) return res.status(response.code).json(response.error)
+        return res.status(response.code).json(response.payload)
+    }
 }
 
 module.exports = RolesController
