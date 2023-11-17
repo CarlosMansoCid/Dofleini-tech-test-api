@@ -71,7 +71,8 @@ class RolesUseCases {
                 return Messages.sucessfullMesage(200, {role:roleInDb})
             }
 
-            const uniquePermissions = getUniqueElementsInTwoArrays(roleInDb.permissions, permissions)
+            const uniquePermissions = getUniqueElementsInTwoArrays(permissions, roleInDb.permissions)
+            console.log(uniquePermissions)
             if(uniquePermissions.length > 0){
                 const newPermissions = [...uniquePermissions,...permissions]
                 roleInDb.permissions = newPermissions
@@ -127,7 +128,6 @@ class RolesUseCases {
             if(!role) return Messages.errorMessage(400,Errors.infoDontExistInDb)
             const filteredsPermissions = getUniqueElementsInTwoArrays(role.permissions, permissions)
             role.permissions = filteredsPermissions
-            console.log(filteredsPermissions)
             await role.save()
             return Messages.sucessfullMesage(200,{role:role})
         }catch{
