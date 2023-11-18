@@ -1,10 +1,9 @@
 const Errors = require('../errors/errors')
 const Messages = require('../messages/messages')
 const RolesModel = require('../apps/roles/models/roles.model')
-const { getAllTheEntitiesWithReadPermission, getOneEntityByName } = require('./entityUseCases')
 const getUniqueElementsInTwoArrays = require('../utils/functions/getUniqueElementsInTwoArrays')
+// const { getAllTheEntitiesWithReadPermission } = require('./entityUseCases')
 const EntityUseCases = require('./entityUseCases')
-
 class RolesUseCases {
     constructor(){}
     static async getOneById(id){
@@ -41,9 +40,7 @@ class RolesUseCases {
         try{
             const roleAllreadyExist = await RolesModel.findOne({name:name})
             if(!!roleAllreadyExist) return Messages.errorMessage(400,Errors.infoAllreadyExistInDb)
-
-            const entitiesWithReadPermission = await getAllTheEntitiesWithReadPermission()
-
+            const entitiesWithReadPermission = await EntityUseCases.getAllTheEntitiesWithReadPermission()
             if(entitiesWithReadPermission.ok){
                 let newRole = new RolesModel({
                     name: name,
@@ -56,7 +53,8 @@ class RolesUseCases {
             return Messages.errorMessage(500, Errors.genericServerError)
 
 
-        }catch{
+        }catch(error){
+            console.log(error)
             return Messages.errorMessage(500,Errors.genericServerError)
         }
 
@@ -98,7 +96,7 @@ class RolesUseCases {
         const [entity, inputPermission] = permissionSplit
 
         try{
-            const entityInDb = await getOneEntityByName(entity)
+            const entityInDb = await EntityUseCases.getOneEntityByName(entity)
             if(!entityInDb.ok) return Messages.errorMessage(400, Errors.badInfo)
             
 
@@ -153,7 +151,7 @@ class RolesUseCases {
                 const resp = await RolesUseCases.addPermissions(permissionsWithEntityName, roleId)
                 if(!resp.ok) return Messages.errorMessage(500, Errors.genericServerError)
             }
-            return Messages.sucessfullMesage(204, {})        }catch{
+            return Messages.sucessfullMesage(204, {})}catch{
             return Messages.errorMessage(500, Errors.genericServerError)
         }
     }
@@ -177,6 +175,5 @@ class RolesUseCases {
             return Messages.errorMessage(500, Errors.genericServerError)
         }
     }
-
 }
 module.exports = RolesUseCases
