@@ -153,6 +153,25 @@ class RolesUseCases {
                 const resp = await RolesUseCases.addPermissions(permissionsWithEntityName, roleId)
                 if(!resp.ok) return Messages.errorMessage(500, Errors.genericServerError)
             }
+            return Messages.sucessfullMesage(204, {})        }catch{
+            return Messages.errorMessage(500, Errors.genericServerError)
+        }
+    }
+    static async deleteAllTheEntityPermissionsFromAllRoles(entityId){
+        try{
+            const entity = await EntityUseCases.getOneEntity(entityId)
+            if(!entity) return Messages.errorMessage(400, Errors.badInfo)
+
+            const allRoles = await RolesModel.find()
+            if(!allRoles) return Messages.errorMessage(400, Errors.infoDontExistInDb)
+
+            const entityPermissions = entity.permissions
+
+            for(let role of allRoles){
+                const newPermissions = role.permissions.filter(permission => !permission.includes(entity.payload.entity.name))
+                role.permissions = newPermissions
+                await role.save()
+            }
             return Messages.sucessfullMesage(204, {})
         }catch{
             return Messages.errorMessage(500, Errors.genericServerError)
