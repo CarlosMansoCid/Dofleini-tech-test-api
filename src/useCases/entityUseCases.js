@@ -1,6 +1,7 @@
 const Errors = require('../errors/errors')
 const Messages = require('../messages/messages')
 const EntitiesModel = require('../apps/entities/models/entity.model')
+const RolesUseCases = require('./rolesUseCases')
 
 class EntityUseCases{
     constructor(){}
@@ -72,8 +73,18 @@ class EntityUseCases{
         try{
 
             const entity = await EntitiesModel.findById(id)
-
             if(!entity) return Messages.errorMessage(400,Errors.infoDontExistInDb)
+            const roles = await RolesUseCases.getAllRoles()
+            if(roles.ok){
+                const permissionsWithEntityName = permissions.map(permission => `${entity.name}:${permission}`)
+                for(let role of roles.payload.roles){
+                    const newPermissions = role.permissions.filter(permission => !permission.includes(...permissionsWithEntityName))
+                    role.permissions = newPermissions
+                    await role.save()
+                }
+            }
+            
+
 
             const currentEntityPermissions = entity.permissions
 
