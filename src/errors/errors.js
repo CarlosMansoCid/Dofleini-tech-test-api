@@ -1,23 +1,23 @@
 class Errors  {
     static genericServerError = {
         errorCode: 5100,
-        message: 'server error'
+        message: 'error en el servidor'
     }
     static infoMissedError = {
         errorCode: 4101,
-        message: 'info missed in the petition'
+        message: 'falta información en la petición'
     }
     static badInfo = {
         errorCode: 4102,
-        message: 'bad info format in the petition'
+        message: 'los datos de la petición no son correctos'
     }
     static infoAllreadyExistInDb = {
         errorCode: 4103,
-        message: 'info allready exist in the db'
+        message: 'la información ya existe'
     }
     static infoDontExistInDb = {
         errorCode: 4104,
-        message: 'info dont exist in the db'
+        message: 'la información no existe'
     }
 }
 module.exports = Errors
