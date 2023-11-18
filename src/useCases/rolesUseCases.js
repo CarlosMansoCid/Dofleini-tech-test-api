@@ -93,6 +93,7 @@ class RolesUseCases {
     }
     static async addOnePermissionAtAllRoles(permission){
         const permissionSplit = permission.split(':')
+        console.log(permissionSplit)
         const [entity, inputPermission] = permissionSplit
 
         try{
@@ -100,7 +101,6 @@ class RolesUseCases {
             if(!entityInDb.ok) return Messages.errorMessage(400, Errors.badInfo)
             
 
-            console.log(entityInDb.payload.entity.permissions.indexOf(inputPermission))
             const thePermissionExistInEntity = entityInDb.payload.entity.permissions.indexOf(inputPermission)
             if(thePermissionExistInEntity === -1) return Messages.errorMessage(400, Errors.badInfo)
 
@@ -108,6 +108,7 @@ class RolesUseCases {
             if(!roles || roles.lenth === 0) return Messages.errorMessage(400, Errors.badInfo)
 
             roles.forEach(async role =>{
+                console.log('')
                 if(role.permissions.indexOf(permission) === -1){
                     role.permissions.push(permission)
                     await role.save()

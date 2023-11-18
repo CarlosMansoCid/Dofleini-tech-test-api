@@ -11,7 +11,7 @@ router.post('/:id', RolesController.addPermissions)
 router.post('/entity/:entity_id', RolesController.addAllPermissionsFromAEntityAtAllRoles)
 
 router.delete('/:id', RolesController.deleteRole)
-
+ 
 router.patch('/', RolesController.deletePermissions)
 router.patch('/entity/:entity_id', RolesController.deleteAllTheEntityPermissionsFromAllRoles)
 

@@ -77,12 +77,9 @@ class EntityUseCases{
             const roles = await RoleModel.find()
             if(roles){
                 const permissionsWithEntityName = permissions.map(permission => `${entity.name}:${permission}`)
-                console.log(permissions)
                 for(let role of roles){
                     const newPermissions = getUniqueElementsInTwoArrays(role.permissions, permissionsWithEntityName)
-                    console.log(newPermissions)
                     role.permissions = newPermissions
-                    console.log(newPermissions)
                     await role.save()
                 }
             }
